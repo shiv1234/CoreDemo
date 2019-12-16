@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
+    <link href="~/CSS/site.css" rel="stylesheet" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <img src="~/Image/Brand.JPG" height="30" width="30" />
+
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="collapsiblenavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsiblenavbar">
+                <ul class=" navbar-nav">
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link">List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Create" class="nav-link">Create</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div>
+            @RenderBody()
+        </div>
+
+        @if (IsSectionDefined("Scripts"))
+        {
+            @RenderSection("Scripts", required: true);
+        }
+    </div>
+</body>
+</html>
