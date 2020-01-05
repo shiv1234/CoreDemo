@@ -56,6 +56,7 @@ namespace CoreDemo.Models
                 employee.Name = employeeChanges.Name;
                 employee.Department = employeeChanges.Department;
                 employee.Email = employeeChanges.Email;
+                employee.PhotoPath = employeeChanges.PhotoPath;
             }
             return employee;
         }

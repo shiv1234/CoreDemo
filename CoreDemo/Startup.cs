@@ -9,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using CoreDemo.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace CoreDemo
 {
@@ -28,7 +31,12 @@ namespace CoreDemo
         {
 
             services.AddDbContextPool<AppDBContext>(options => options.UseSqlServer(_iconfig.GetConnectionString("EmployeeDBConnection")));
-            services.AddMvc();
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDBContext>();
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
         }
 
@@ -39,20 +47,27 @@ namespace CoreDemo
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+            }
             //FileServerOptions fileServerOptions = new FileServerOptions();
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("Home.html");
             //app.UseFileServer(fileServerOptions);
 
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseMvcWithDefaultRoute();
-           // app.UseMvc(routs=>{
-           //     routs.MapRoute("default", "{controller = Home}/{action = Index}/{Id?}");
-           //} );
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            //app.UseMvc(routs => 
+            //{
+            //    routs.MapRoute("default", "{controller = Home}/{action = Index}/{Id?}");
+            //});
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync("Hello World!");
+            //});
         }
     }
 }
